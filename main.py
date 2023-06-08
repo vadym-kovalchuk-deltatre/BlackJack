@@ -13,21 +13,22 @@ def addCard(person:list[int]):
     person.append(cards.getCard())
     print(f"User cards:{userCards}, DealerCards:{dealerCards}")
 
-def checkWinner()->str:
+def checkWinner()->int:
     userSum = calcCards(userCards)
     dealerSum = calcCards(dealerCards)
-    if userSum == 21:
-        return "User win"
-    if dealerSum == 21:
-        return "Dealer win"
-    if userSum > 21:
-        return "User loose. More than 21"
-    if dealerSum > 21:
-        return "Dealer loose. More than 21"
-    if userSum > dealerSum:
-        return "User win"
-    if dealerSum > userSum:
-        return "Dealer win"
+    if userSum == 21 or userSum > dealerSum or dealerSum > 21:
+        print("User win")
+        return 1
+    if dealerSum == 21 or dealerSum > userSum or userSum > 21:
+        print("Dealer win")
+        return -1
+    if dealerSum == userSum:
+        print("Draw")
+        return 0
+    if dealerSum <= 17:
+        print("Dealer must take another card")
+        return -2
+
 print(userCards, dealerCards, calcCards(userCards), calcCards(dealerCards))
 
 nextTurn: bool = True
@@ -35,7 +36,7 @@ nextTurn: bool = True
 while nextTurn:
     answer = input("Add next card: ")
     if answer =="n":
-        print(checkWinner())
+        checkWinner()
         nextTurn = False
         continue
     addCard(userCards)
