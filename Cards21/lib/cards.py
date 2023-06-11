@@ -6,7 +6,7 @@ cards_Hearts:list[int] = cards.copy()
 cards_Diamonds:list[int] = cards.copy()
 cards_Spades:list[int] = cards.copy()
 cards_Clubs:list[int] = cards.copy()
-suits:tuple[str] = ("Hearts","Diamonds","Spades","Clubs")
+suits:tuple[str] = ("♥","♦","♠","♣")
 suits_cards:list[list[int]] = [cards_Hearts,cards_Diamonds,cards_Spades,cards_Clubs]
 
 def getCard() -> list[str,int]:

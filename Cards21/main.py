@@ -1,17 +1,17 @@
-import cards
-from Player import Player
+import lib.cards as cards
+from lib.Player import Player
 
 # region Main functions
-user = Player("User")
-dealer = Player("Dealer")
-is_game_over = False
+user: Player = Player("User")
+dealer: Player = Player("Dealer")
+is_game_over: bool = False
 
 def printCards():
     print(f"User cards:{user.getCards()} - {user.getSum()}\n\
 Dealer cards: {dealer.getCards()} - {dealer.getSum()}")
 
-def printWinner(winner:str):
-    print(f"{winner.upper()} WIN!")
+def printWinner(winner:str) -> None:
+    print(f"    {winner.upper()} WIN!")
 
 def checkWinner(sum:int) -> int:
         if sum == 21:
@@ -20,10 +20,42 @@ def checkWinner(sum:int) -> int:
             return -1 # looser
         return 0 # draw
 
+def findClosestWinner() -> None:
+    """
+    The function compares the sum of cards held by the dealer and the user in a card game and prints the
+    winner or a draw.
+    """
+    if (dealer_sum := dealer.getSum()) > (user_sum := user.getSum()):
+        printWinner("dealer")
+    elif dealer_sum < user_sum:
+        printWinner("User")
+    else:
+        print("Draw")
+
 def getIsGameOver(check_winner:int) -> bool:
     return check_winner in [-1,1]
 
+def checkUserTurn(check_winner:int) -> None:
+    if check_winner == -1:
+        printWinner("dealer")
+    elif check_winner == 1:
+        printWinner("user")
+
+def checkDealerTurn(check_winner:int, is_game_over_def:bool) -> bool:
+    is_game_over = is_game_over_def
+    if check_winner == -1:
+        printWinner("user")
+    elif check_winner == 1:
+        printWinner("dealer")
+    elif check_winner == 0:
+        findClosestWinner()
+        is_game_over = True
+
+    return is_game_over
+
 # endregion main functions
+
+#! Main code block
 
 # This code block is adding two cards to both the user's and dealer's hands. The `for _ in range(2)`
 # loop is iterating twice, and on each iteration, the `getCard()` function from the `cards` module is
@@ -44,30 +76,12 @@ if is_dealer_win:
 is_game_over = (is_user_win or is_dealer_win)
 
 while not is_game_over:
-    has_another_turn = input("Add another card?[y, n]: ")
-    if has_another_turn == "y":
+    if input("Add another card?[y, n]: ") == "y":
         user.addCard(cards.getCard())
-        check_winner = checkWinner(user.getSum())
-        if check_winner == -1:
-            printWinner("dealer")
-        elif check_winner == 1:
-            printWinner("user")
+        checkUserTurn(check_winner:=checkWinner(user.getSum()))
         is_game_over = getIsGameOver(check_winner)
     else:
         while dealer.getSum() <= 17:
             dealer.addCard(cards.getCard())
-        check_winner = checkWinner(dealer.getSum())
-        is_game_over = getIsGameOver(check_winner)
-        if check_winner == -1:
-            printWinner("user")
-        elif check_winner == 1:
-            printWinner("dealer")
-        elif check_winner == 0:
-            if dealer.getSum() > user.getSum():
-                printWinner("dealer")
-            elif dealer.getSum() < user.getSum():
-                printWinner("User")
-            else:
-                print("Draw")
-            is_game_over = True
+        is_game_over = checkDealerTurn(check_winner:=checkWinner(dealer.getSum()), getIsGameOver(check_winner))
     printCards()
