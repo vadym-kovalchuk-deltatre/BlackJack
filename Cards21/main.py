@@ -1,42 +1,73 @@
 import cards
+from Player import Player
 
-userCards:list[int] = [cards.getCard()]
-dealerCards:list[int] = [cards.getCard()]
+# region Main functions
+user = Player("User")
+dealer = Player("Dealer")
+is_game_over = False
 
-def calcCards(person: list[int])->int:
-    sum = 0
-    for digit in person:
-        sum += digit
-    return sum
+def printCards():
+    print(f"User cards:{user.getCards()} - {user.getSum()}\n\
+Dealer cards: {dealer.getCards()} - {dealer.getSum()}")
 
-def addCard(person:list[int]):
-    person.append(cards.getCard())
-    print(f"User cards:{userCards}, DealerCards:{dealerCards}")
+def printWinner(winner:str):
+    print(f"{winner.upper()} WIN!")
 
-def checkWinner()->int:
-    userSum = calcCards(userCards)
-    dealerSum = calcCards(dealerCards)
-    if userSum == 21 or userSum > dealerSum or dealerSum > 21:
-        print("User win")
-        return 1
-    if dealerSum == 21 or dealerSum > userSum or userSum > 21:
-        print("Dealer win")
-        return -1
-    if dealerSum == userSum:
-        print("Draw")
-        return 0
-    if dealerSum <= 17:
-        print("Dealer must take another card")
-        return -2
+def checkWinner(sum:int) -> int:
+        if sum == 21:
+            return 1 # winner
+        if sum > 21:
+            return -1 # looser
+        return 0 # draw
 
-print(userCards, dealerCards, calcCards(userCards), calcCards(dealerCards))
+def getIsGameOver(check_winner:int) -> bool:
+    return check_winner in [-1,1]
 
-nextTurn: bool = True
+# endregion main functions
 
-while nextTurn:
-    answer = input("Add next card: ")
-    if answer =="n":
-        checkWinner()
-        nextTurn = False
-        continue
-    addCard(userCards)
+# This code block is adding two cards to both the user's and dealer's hands. The `for _ in range(2)`
+# loop is iterating twice, and on each iteration, the `getCard()` function from the `cards` module is
+# called to get a random card. The `addCard()` method is then called on both the `user` and `dealer`
+# objects to add the card to their respective hands. This is done to initialize the game with two
+# cards for each player.
+for _ in range(2):
+    user.addCard(cards.getCard())
+    dealer.addCard(cards.getCard())
+
+printCards()
+is_user_win = user.checkFirstTurn()
+if is_user_win:
+    printWinner("user")
+is_dealer_win = dealer.checkFirstTurn()
+if is_dealer_win:
+    printWinner("dealer")
+is_game_over = (is_user_win or is_dealer_win)
+
+while not is_game_over:
+    has_another_turn = input("Add another card?[y, n]: ")
+    if has_another_turn == "y":
+        user.addCard(cards.getCard())
+        check_winner = checkWinner(user.getSum())
+        if check_winner == -1:
+            printWinner("dealer")
+        elif check_winner == 1:
+            printWinner("user")
+        is_game_over = getIsGameOver(check_winner)
+    else:
+        while dealer.getSum() <= 17:
+            dealer.addCard(cards.getCard())
+        check_winner = checkWinner(dealer.getSum())
+        is_game_over = getIsGameOver(check_winner)
+        if check_winner == -1:
+            printWinner("user")
+        elif check_winner == 1:
+            printWinner("dealer")
+        elif check_winner == 0:
+            if dealer.getSum() > user.getSum():
+                printWinner("dealer")
+            elif dealer.getSum() < user.getSum():
+                printWinner("User")
+            else:
+                print("Draw")
+            is_game_over = True
+    printCards()

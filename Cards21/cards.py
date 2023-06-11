@@ -1,23 +1,23 @@
 import random
 
-cards:list[int] = [11]+[index for index in range(2,11)]
-cards += [10]*4
-cardsHearts:list[int] = cards.copy()
-cardsDiamonds:list[int] = cards.copy()
-cardsSpades:list[int] = cards.copy()
-cardsClubs:list[int] = cards.copy()
+cards:list[int] = [11] + [card_range for card_range in range(2,11)] # starts from Ace = 11
+cards += [10] * 4
+cards_Hearts:list[int] = cards.copy()
+cards_Diamonds:list[int] = cards.copy()
+cards_Spades:list[int] = cards.copy()
+cards_Clubs:list[int] = cards.copy()
 suits:tuple[str] = ("Hearts","Diamonds","Spades","Clubs")
-suitsCards:list[list[int]] = [cardsHearts,cardsDiamonds,cardsSpades,cardsClubs]
+suits_cards:list[list[int]] = [cards_Hearts,cards_Diamonds,cards_Spades,cards_Clubs]
 
-def getCard()->list[str,int]:
+def getCard() -> list[str,int]:
 	"""
-	The function returns a randomly selected card from a deck of cards, along with its corresponding
-	suit.
-	:return: A list containing a string representing the suit of the card and an integer representing
-	the value of the card.
+	The function "getCard" returns a randomly selected card and its corresponding suit from a deck of
+	cards.
+	:return: A list containing a string representing a card (e.g. "Ace", "King", "Queen", etc.) and a
+	string representing the suit of the card (e.g. "Hearts", "Diamonds", "Clubs", "Spades").
 	"""
-	suitIndex = random.randrange(0, len(suits))
-	suitCards = suitsCards[suitIndex]
-	card = suitCards.pop(random.randint(0, len(suitCards) - 1))
+	suit_index = random.randrange(0, len(suits))
+	suit_cards = suits_cards[suit_index]
+	card = suit_cards.pop(random.randint(0, len(suit_cards) - 1))
 
-	return [suits[suitIndex],card]
+	return [card,suits[suit_index]]
