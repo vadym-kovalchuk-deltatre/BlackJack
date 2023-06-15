@@ -9,17 +9,17 @@ is_game_over: bool = False
 
 
 def print_cards():
-    '''
+    """
     Print user cards and total sum
-    '''
-    print(f"User cards:{user.getCards()} - {user.getSum()}\n\
-Dealer cards: {dealer.getCards()} - {dealer.getSum()}")
+    """
+    print(f"User cards:{user.get_cards()} - {user.get_sum()}\n\
+Dealer cards: {dealer.get_cards()} - {dealer.get_sum()}")
 
 
 def print_winner(winner: str) -> None:
-    '''
+    """
     Print name of winner
-    '''
+    """
     print(f"    {winner.upper()} WIN!")
 
 
@@ -48,7 +48,7 @@ def find_closest_winner() -> None:
     and the user in a card game and prints the
     winner or a draw.
     """
-    if (dealer_sum := dealer.getSum()) > (user_sum := user.getSum()):
+    if (dealer_sum := dealer.get_sum()) > (user_sum := user.get_sum()):
         print_winner("dealer")
     elif dealer_sum < user_sum:
         print_winner("User")
@@ -126,11 +126,10 @@ is_game_over: bool = (IS_USER_WIN or IS_DEALER_WIN)
 while not is_game_over:
     if input("Add another card?[y, n]: ") == "y":
         user.add_card(cards.get_card())
-        check_user_turn(check_winner := check_winner(user.getSum()))
+        check_user_turn(check_winner := check_winner(user.get_sum()))
         is_game_over = get_is_game_over(check_winner)
     else:
         while dealer.get_sum() <= 17:
             dealer.add_card(cards.get_card())
-        is_game_over = check_dealer_turn(check_winner := check_winner(dealer.getSum()), \
-                                         get_is_game_over(check_winner))
+        is_game_over = check_dealer_turn(check_winner := check_winner(dealer.get_sum()), get_is_game_over(check_winner))
     print_cards()
