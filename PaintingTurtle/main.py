@@ -27,9 +27,16 @@ def get_direction(dirs: list[int, int, int, int]) -> int:
     return random.choice(dirs)
 
 
-def on_click() -> bool:
-    print("Click")
-    return False
+def on_change_direction() -> None:
+    timmy.right(get_direction(directions))
+
+
+def on_exit_screen() -> None:
+    screen.bye()
+
+
+def on_pause() -> None:
+    screen.exitonclick()
 
 
 def check_margins() -> bool:
@@ -43,12 +50,17 @@ timmy: Turtle = Turtle()
 timmy.shape("circle")
 timmy.resizemode("user")
 timmy.shapesize(.1, .1, .2)
+
 colormode(255)
-screen = Screen()
+screen: Screen = Screen()
 screen.title("Timmy Random Move")
+screen.listen()
+screen.onkey(on_change_direction, "space")
+screen.onkey(on_exit_screen, 'x')
+screen.onkey(on_pause, 'p')
+
 while True:
     timmy.pencolor(get_color())
     timmy.speed(random.randint(3, 10))
     timmy.fd(10)
     timmy.left(get_direction(directions))
-
