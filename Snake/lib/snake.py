@@ -2,6 +2,10 @@ from turtle import Turtle
 
 MOVE_DISTANCE: int = 20
 STARTING_POSITIONS: list(tuple[int, int]) = [(0, 0), (-20, 0), (-40, 0)]
+RIGHT: int = 0
+UP: int = 90
+LEFT: int = 180
+DOWN: int = 270
 
 
 def create_turtle_segment() -> Turtle:
@@ -40,7 +44,8 @@ class Snake:
             segment.goto(pos)
             segment.st()
             self.snake.append(segment)
-        self.snake[0].color("red")  # dev
+        self.head = self.snake[0]
+        self.head.color("red")  # dev
 
     """
         Moves the snake forward by one segment.
@@ -60,24 +65,25 @@ class Snake:
         snake.move()
         """
 
-    def get_first_segment(self) -> Turtle:
-        return self.snake[0]
-
     def move(self) -> None:
         for i in range(len(self.snake) - 1, 0, -1):
             segment_x_pos = self.snake[i - 1].xcor()
             segment_y_pos = self.snake[i - 1].ycor()
             self.snake[i].goto(segment_x_pos, segment_y_pos)
-        self.get_first_segment().forward(MOVE_DISTANCE)
+        self.head.forward(MOVE_DISTANCE)
 
     def right(self) -> None:
-        self.get_first_segment().setheading(0)
+        if self.head.heading() != LEFT:
+            self.head.setheading(RIGHT)
 
     def up(self) -> None:
-        self.get_first_segment().setheading(90)
+        if self.head.heading() != DOWN:
+            self.head.setheading(UP)
 
     def left(self) -> None:
-        self.get_first_segment().setheading(180)
+        if self.head.heading() != RIGHT:
+            self.head.setheading(LEFT)
 
     def down(self) -> None:
-        self.get_first_segment().setheading(270)
+        if self.head.heading() != UP:
+            self.head.setheading(DOWN)
