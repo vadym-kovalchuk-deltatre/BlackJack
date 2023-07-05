@@ -23,7 +23,7 @@ def print_winner(winner: str) -> None:
     print(f"    {winner.upper()} WIN!")
 
 
-def check_winner(total_sum: int) -> int:
+def check_sum(total_sum: int) -> int:
     """
     The function "check_winner" takes an integer input "total_sum" and
     returns 1 if it is equal to 21, -1
@@ -126,10 +126,13 @@ is_game_over: bool = (IS_USER_WIN or IS_DEALER_WIN)
 while not is_game_over:
     if input("Add another card?[y, n]: ") == "y":
         user.add_card(cards.get_card())
-        check_user_turn(check_winner := check_winner(user.get_sum()))
+        check_user_turn(check_winner := check_sum(user.get_sum()))
         is_game_over = get_is_game_over(check_winner)
+        if is_game_over:
+            print_cards()
+            break
     else:
         while dealer.get_sum() <= 17:
             dealer.add_card(cards.get_card())
-        is_game_over = check_dealer_turn(check_winner := check_winner(dealer.get_sum()), get_is_game_over(check_winner))
+        is_game_over = check_dealer_turn(check_winner := check_sum(dealer.get_sum()), get_is_game_over(check_winner))
     print_cards()
