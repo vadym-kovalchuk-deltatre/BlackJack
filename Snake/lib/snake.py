@@ -21,6 +21,8 @@ class Snake:
 
     def __init__(self):
         self._create_snake()
+        self.head = self.snake[0]
+        self.head.color("red")  # dev
 
     """
         Creates a snake by adding turtle segments to the snake list.
@@ -44,8 +46,6 @@ class Snake:
             segment.goto(pos)
             segment.st()
             self.snake.append(segment)
-        self.head = self.snake[0]
-        self.head.color("red")  # dev
 
     """
         Moves the snake forward by one segment.
@@ -87,3 +87,7 @@ class Snake:
     def down(self) -> None:
         if self.head.heading() != UP:
             self.head.setheading(DOWN)
+
+    def check_food_dist(self, food):
+        return self.head.distance(food) <= 15
+

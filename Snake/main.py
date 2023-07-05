@@ -4,6 +4,8 @@
 
 from turtle import Screen
 from lib.snake import Snake
+from lib.food import Food
+from lib.score import Score
 import time
 
 # Screen setup
@@ -16,10 +18,12 @@ screen.listen()
 
 snake: Snake = Snake()
 screen.onkey(snake.up, "Up")
-screen.onkey(snake.down,"Down")
-screen.onkey(snake.left,"Left")
-screen.onkey(snake.right,"Right")
+screen.onkey(snake.down, "Down")
+screen.onkey(snake.left, "Left")
+screen.onkey(snake.right, "Right")
 
+food: Food = Food()
+score_board = Score()
 
 is_game_on = True
 
@@ -27,6 +31,10 @@ while is_game_on:
     screen.update()
     time.sleep(.1)
     snake.move()
+
+    if snake.check_food_dist(food):
+        food.refresh()
+        score_board.add_score()
 
 
 screen.exitonclick()
