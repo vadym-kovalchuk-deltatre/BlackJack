@@ -31,10 +31,15 @@ while is_game_on:
     screen.update()
     time.sleep(.1)
     snake.move()
+    snake.check_wall()
 
     if snake.check_food_dist(food):
         food.refresh()
         score_board.add_score()
+        snake.extend()
 
+    if snake.check_collision():
+        score_board.game_over_msg()
+        is_game_on = False
 
 screen.exitonclick()

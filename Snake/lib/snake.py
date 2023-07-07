@@ -6,6 +6,7 @@ RIGHT: int = 0
 UP: int = 90
 LEFT: int = 180
 DOWN: int = 270
+MEASURES = [-280, 280]
 
 
 def create_turtle_segment() -> Turtle:
@@ -46,6 +47,12 @@ class Snake:
             segment.goto(pos)
             segment.st()
             self.snake.append(segment)
+
+    def extend(self) -> None:
+        segment: Turtle = create_turtle_segment()
+        tail: Turtle = self.snake[-1]
+        segment.goto(tail.xcor(), tail.ycor())
+        self.snake.append(segment)
 
     """
         Moves the snake forward by one segment.
@@ -88,6 +95,34 @@ class Snake:
         if self.head.heading() != UP:
             self.head.setheading(DOWN)
 
-    def check_food_dist(self, food):
+    def check_food_dist(self, food) -> bool:
         return self.head.distance(food) <= 15
 
+    def check_collision(self) -> bool:
+        for segment in self.snake:
+            if segment == self.head:
+                pass
+            else:
+                return self.head.distance(segment) < 10
+
+    def check_wall(self) -> None:
+        x_pos = self.head.xcor()
+        y_pos = self.head.ycor()
+        is_out_x = self._check_measures(x_pos)
+        is_out_y = self._check_measures(y_pos)
+        if is_out_x:
+            print(f"isOutx {x_pos}")
+            self.head.goto(self._get_new_position(pos=x_pos), y_pos)
+        if is_out_y:
+            print(f"isOut Y {y_pos}")
+            self.head.goto(x_pos, self._get_new_position(pos=y_pos))
+
+    @staticmethod
+    def _check_measures(pos: float, padding: int = 0) -> bool:
+        return pos < MEASURES[0] - padding or pos > MEASURES[1] + padding
+
+    def _get_new_position(self, pos: float) -> float:
+        if self._check_measures(pos):
+            return pos * -1
+        else:
+            return pos
