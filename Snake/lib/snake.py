@@ -100,9 +100,8 @@ class Snake:
 
     def check_collision(self) -> bool:
         for segment in self.snake:
-            if segment == self.head:
-                pass
-            else:
+            if segment != self.head:
+                print(f"Collision {self.head.distance(segment) < 10}")
                 return self.head.distance(segment) < 10
 
     def check_wall(self) -> None:

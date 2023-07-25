@@ -1,8 +1,8 @@
 # https://pypi.org/project/PyAutoGUI/
 
-import pyautogui as pag
 import random
 import time
+import pyautogui as pag
 
 pag.FAILSAFE = False
 
