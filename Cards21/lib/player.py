@@ -1,6 +1,6 @@
 # The Player class represents a player in a card game and includes methods for adding cards, getting
 # the sum of the player's cards, and checking if it is the first turn of the game.
-from typing import List
+from typing import Any, List
 
 
 class Player:
@@ -17,7 +17,7 @@ class Player:
                 card[0] = 1
             break
 
-    def add_card[C: (str, int)](self, card: C) -> None:
+    def add_card(self, card: list[Any]) -> None:
         """
         The function adds a card to a list of cards.
 
@@ -28,7 +28,7 @@ class Player:
         """
         self._cards.append(card)
 
-    def get_cards(self) -> List[list[str, int]]:
+    def get_cards[C: (str, int)](self) -> List[C]:
         return self._cards
 
     def get_sum(self) -> int:

@@ -1,5 +1,5 @@
 import random
-from typing import List, Tuple
+from typing import List, Tuple, Any
 
 
 class Cards:
@@ -15,7 +15,7 @@ class Cards:
             self.cards.copy(),  # Clubs
         ]
 
-    def get_card[C: (str, int)](self) -> List[C]:
+    def get_card[C: (str, int)](self) -> List[Any]:
         """
         The function "get_card" returns a randomly selected card and
         its corresponding suit from a deck of
@@ -31,7 +31,7 @@ class Cards:
 
         return [card, self.suits[suit_index]]
 
-    def _get_shuffled_suits(self) -> Tuple:
+    def _get_shuffled_suits(self) -> Tuple[str,]:
         """
         The _get_shuffled_suits function returns a tuple of the suits in the deck, but shuffled.
 

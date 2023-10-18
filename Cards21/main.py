@@ -128,7 +128,7 @@ if IS_USER_WIN:
 IS_DEALER_WIN = dealer.check_first_turn()
 if IS_DEALER_WIN:
     print_winner("dealer")
-is_game_over: bool = IS_USER_WIN or IS_DEALER_WIN
+is_game_over = IS_USER_WIN or IS_DEALER_WIN
 
 while not is_game_over:
     if input("Add another card?[y, n]: ") == "y":
