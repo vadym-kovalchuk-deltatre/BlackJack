@@ -1,26 +1,33 @@
 """Black Jack 21"""
-from lib import cards
-from lib.Player import Player
+from lib.cards import Cards
+from lib.player import Player
 
 # region Main functions
 user: Player = Player("User")
 dealer: Player = Player("Dealer")
 is_game_over: bool = False
+cards = Cards()
 
 
 def print_cards():
     """
     Print user cards and total sum
     """
-    print(f"User cards:{user.get_cards()} - {user.get_sum()}\n\
-Dealer cards: {dealer.get_cards()} - {dealer.get_sum()}")
+    print(
+        f"User cards:{user.get_cards()} - {user.get_sum()}\n\
+Dealer cards: {dealer.get_cards()} - {dealer.get_sum()}"
+    )
 
 
 def print_winner(winner: str) -> None:
     """
-    Print name of winner
+    The print_winner function prints the winner of a game.
+
+    :param winner: str: Tell the function what to print
+    :return: None
+    :doc-author: Trelent
     """
-    print(f"    {winner.upper()} WIN!")
+    print(f"{winner.upper()} WIN!")
 
 
 def check_sum(total_sum: int) -> int:
@@ -49,7 +56,7 @@ def find_closest_winner() -> None:
     winner or a draw.
     """
     if (dealer_sum := dealer.get_sum()) > (user_sum := user.get_sum()):
-        print_winner("dealer")
+        print_winner("Dealer")
     elif dealer_sum < user_sum:
         print_winner("User")
     else:
@@ -121,7 +128,7 @@ if IS_USER_WIN:
 IS_DEALER_WIN = dealer.check_first_turn()
 if IS_DEALER_WIN:
     print_winner("dealer")
-is_game_over: bool = (IS_USER_WIN or IS_DEALER_WIN)
+is_game_over: bool = IS_USER_WIN or IS_DEALER_WIN
 
 while not is_game_over:
     if input("Add another card?[y, n]: ") == "y":
@@ -134,5 +141,7 @@ while not is_game_over:
     else:
         while dealer.get_sum() <= 17:
             dealer.add_card(cards.get_card())
-        is_game_over = check_dealer_turn(check_winner := check_sum(dealer.get_sum()), get_is_game_over(check_winner))
+        is_game_over = check_dealer_turn(
+            check_winner := check_sum(dealer.get_sum()), get_is_game_over(check_winner)
+        )
     print_cards()
