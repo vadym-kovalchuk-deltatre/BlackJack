@@ -150,7 +150,7 @@ while next_game:
     is_game_over = IS_USER_WIN or IS_DEALER_WIN
 
     while not is_game_over:
-        if input("Add another card?[y, n]: ") == "y":
+        if input("Add another card?[y, n]: ").lower() == "y":
             user.add_card(cards.get_card())
             check_user_turn(check_winner := check_sum(user.get_sum()))
             is_game_over = check_is_game_over(check_winner)
@@ -165,7 +165,7 @@ while next_game:
                 check_is_game_over(check_winner),
             )
         print_cards()
-    if input("Next turn?[y, n]: ") == "y":
+    if input("Next turn?[y, n]: ").lower() == "y":
         refresh_table()
     else:
         next_game = False
