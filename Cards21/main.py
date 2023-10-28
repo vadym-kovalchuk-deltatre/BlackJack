@@ -1,12 +1,14 @@
 """Black Jack 21"""
+from lib import utils
 from lib.cards import Cards
 from lib.player import Player
+from lib.storedb import StoreResults
 
-# region Main functions
-user: Player = Player("User")
-dealer: Player = Player("Dealer")
-is_game_over: bool = False
 cards = Cards()
+user = Player("User")
+dealer = Player("Dealer")
+is_game_over = False
+next_game = True
 
 
 def print_cards():
@@ -14,20 +16,22 @@ def print_cards():
     Print user cards and total sum
     """
     print(
-        f"User cards:{user.get_cards()} - {user.get_sum()}\n\
-Dealer cards: {dealer.get_cards()} - {dealer.get_sum()}"
+        f"User cards:{user.cards} - {user.get_sum()}\n\
+        Dealer cards: {dealer.cards} - {dealer.get_sum()}"
     )
 
 
-def print_winner(winner: str) -> None:
+def print_winner(winner: Player) -> None:
     """
     The print_winner function prints the winner of a game.
 
     :param winner: str: Tell the function what to print
     :return: None
-    :doc-author: Trelent
     """
-    print(f"{winner.upper()} WIN!")
+    msg = f"{winner.name.upper()} WIN!"
+    print(msg)
+    utils.print_underline(len(msg))
+    StoreResults().last_winner = str(winner)
 
 
 def check_sum(total_sum: int) -> int:
@@ -56,14 +60,15 @@ def find_closest_winner() -> None:
     winner or a draw.
     """
     if (dealer_sum := dealer.get_sum()) > (user_sum := user.get_sum()):
-        print_winner("Dealer")
+        print_winner(dealer)
     elif dealer_sum < user_sum:
-        print_winner("User")
+        print_winner(user)
     else:
         print("Draw")
+        StoreResults().clean_last_winner()
 
 
-def get_is_game_over(winner: int) -> bool:
+def check_is_game_over(winner: int) -> bool:
     """
     The function checks if the game is over by checking if there is a winner.
 
@@ -73,7 +78,7 @@ def get_is_game_over(winner: int) -> bool:
     the game is still ongoing,
     and 1 represents that player 1 has won the game
     :type winner: int
-    :return: The function `get_is_game_over` takes an
+    :return: The function `check_is_game_over` takes an
     integer `winner` as input and returns a boolean
     value. It returns `True` if the `winner` is either -1 or 1, indicating that the game is over.
     Otherwise, it returns `False`, indicating that the game is still ongoing.
@@ -86,9 +91,9 @@ def check_user_turn(winner: int) -> None:
     Check first turn, 2 cards
     """
     if winner == -1:
-        print_winner("dealer")
+        print_winner(dealer)
     elif winner == 1:
-        print_winner("user")
+        print_winner(user)
 
 
 def check_dealer_turn(winner: int, is_game_over_def: bool) -> bool:
@@ -97,9 +102,9 @@ def check_dealer_turn(winner: int, is_game_over_def: bool) -> bool:
     """
     is_over = is_game_over_def
     if winner == -1:
-        print_winner("user")
+        print_winner(user)
     elif winner == 1:
-        print_winner("dealer")
+        print_winner(dealer)
     elif winner == 0:
         find_closest_winner()
         is_over = True
@@ -107,7 +112,16 @@ def check_dealer_turn(winner: int, is_game_over_def: bool) -> bool:
     return is_over
 
 
-# endregion main functions
+def refresh_table():
+    """
+    The function refresh_table refreshes the cards, user,
+    and dealer objects and then prints an empty line.
+    """
+    cards.refresh()
+    user.refresh()
+    dealer.refresh()
+    print("")
+
 
 # ! Main code block
 
@@ -117,31 +131,42 @@ def check_dealer_turn(winner: int, is_game_over_def: bool) -> bool:
 # called to get a random card. The `addCard()` method is then called on both the `user` and `dealer`
 # objects to add the card to their respective hands. This is done to initialize the game with two
 # cards for each player.
-for _ in range(2):
-    user.add_card(cards.get_card())
-    dealer.add_card(cards.get_card())
-
-print_cards()
-IS_USER_WIN = user.check_first_turn()
-if IS_USER_WIN:
-    print_winner("user")
-IS_DEALER_WIN = dealer.check_first_turn()
-if IS_DEALER_WIN:
-    print_winner("dealer")
-is_game_over = IS_USER_WIN or IS_DEALER_WIN
-
-while not is_game_over:
-    if input("Add another card?[y, n]: ") == "y":
+while next_game:
+    last_winner = StoreResults().last_winner
+    if last_winner:
+        print(last_winner)
+        utils.print_underline(len(last_winner) + 1)
+    for _ in range(2):
         user.add_card(cards.get_card())
-        check_user_turn(check_winner := check_sum(user.get_sum()))
-        is_game_over = get_is_game_over(check_winner)
-        if is_game_over:
-            print_cards()
-            break
-    else:
-        while dealer.get_sum() <= 17:
-            dealer.add_card(cards.get_card())
-        is_game_over = check_dealer_turn(
-            check_winner := check_sum(dealer.get_sum()), get_is_game_over(check_winner)
-        )
+        dealer.add_card(cards.get_card())
+
     print_cards()
+    IS_USER_WIN = user.check_first_turn()
+    if IS_USER_WIN:
+        print_winner(user)
+    IS_DEALER_WIN = dealer.check_first_turn()
+    if IS_DEALER_WIN:
+        print_winner(dealer)
+    is_game_over = IS_USER_WIN or IS_DEALER_WIN
+
+    while not is_game_over:
+        if input("Add another card?[y, n]: ") == "y":
+            user.add_card(cards.get_card())
+            check_user_turn(check_winner := check_sum(user.get_sum()))
+            is_game_over = check_is_game_over(check_winner)
+            if is_game_over:
+                print_cards()
+                break
+        else:
+            while dealer.get_sum() <= 17:
+                dealer.add_card(cards.get_card())
+            is_game_over = check_dealer_turn(
+                check_winner := check_sum(dealer.get_sum()),
+                check_is_game_over(check_winner),
+            )
+        print_cards()
+    if input("Next turn?[y, n]: ") == "y":
+        refresh_table()
+    else:
+        next_game = False
+        print("Bye!")

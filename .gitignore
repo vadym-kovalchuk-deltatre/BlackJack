@@ -2,3 +2,7 @@ __pycache__
 !/.idea/
 Cards21/.idea
 .idea
+*.bak
+*.dat
+*.dir
+/Cards21/lib/db/
