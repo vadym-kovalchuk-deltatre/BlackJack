@@ -37,24 +37,28 @@ class Player:
         self._cards.append(card)
 
     @property
-    def cards[C: (str, int)](self) -> List[C]:
+    def cards(self) -> str:
         """
         The cards function returns a list of cards.
 
         :param self: Refer to the object itself
-        :return: A list of cards
+        :return: str of cards
         """
-        return self._cards
+        pair_cards = list(map(lambda pair: str(pair[0]) + pair[1], self._cards))
+        return ", ".join(pair_cards)
 
     def get_sum(self) -> int:
         """
         This function calculates the sum of the values of cards in a deck.
         :return: the sum of the values of all the cards in the deck.
         """
-        total_sum = 0
-        for card in self._cards:
-            total_sum += card[0]
-        return total_sum
+
+        def mapping(card_pair: List) -> int:
+            return card_pair[0]
+
+        return sum(
+            list(map(mapping, self._cards))
+        )  # or sum(list(map(lambda card_pair: card_pair[0], _cards)))
 
     def check_first_turn(self) -> bool:
         """

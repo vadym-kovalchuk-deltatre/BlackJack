@@ -16,7 +16,7 @@ def print_cards():
     Print user cards and total sum
     """
     for player in (user, dealer):
-        print(f"{player.name:^10}:{player.cards} - {player.get_sum()}")
+        print(f"{player.name:^10}: {player.cards} = {player.get_sum()}")
     # print(f"Dealer cards: {dealer.cards} - {dealer.get_sum()}")
 
 
@@ -152,9 +152,7 @@ while next_game:
             user.add_card(cards.get_card())
             check_user_turn(check_winner := check_sum(user.get_sum()))
             is_game_over = check_is_game_over(check_winner)
-            if is_game_over:
-                print_cards()
-                break
+            print_cards()
         else:
             while dealer.get_sum() <= 17:
                 dealer.add_card(cards.get_card())
@@ -162,7 +160,8 @@ while next_game:
                 check_winner := check_sum(dealer.get_sum()),
                 check_is_game_over(check_winner),
             )
-        print_cards()
+            if is_game_over:
+                print_cards()
     if input("Next turn?[y, n]: ").lower() == "y":
         refresh_table()
     else:
