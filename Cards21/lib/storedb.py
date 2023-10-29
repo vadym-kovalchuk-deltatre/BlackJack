@@ -11,6 +11,7 @@ class StoreResults:
     """The StoreResults class is used to store and manage results."""
 
     LAST_WINNER = "last_winner"
+    LAST_WINNER_TEXT = "Last Winner"
 
     @property
     def last_winner(self) -> str:
@@ -25,7 +26,11 @@ class StoreResults:
             return ""
 
         db = shelve.open(StoreResults._get_db_path())
-        winner = f"Last Winner: {db[self.LAST_WINNER]}" if list(db.keys()) else ""
+        winner = (
+            f"{self.LAST_WINNER_TEXT}: {db[self.LAST_WINNER]}"
+            if list(db.keys())
+            else ""
+        )
         db.close()
 
         return winner
@@ -91,8 +96,13 @@ class StoreResults:
 
 
 if __name__ == "__main__":
-    store_results = StoreResults()
-    store_results.last_winner = "GoodMan: 25"
-    print(store_results.last_winner)
-    store_results.clean_last_winner()
-    print(f"Last winner after cleaning: {store_results.last_winner}")
+    last_winner = "GoodMan: 25"
+    StoreResults().last_winner = last_winner
+    print(StoreResults().last_winner)
+    assert (
+        StoreResults().last_winner
+        == f"{StoreResults().LAST_WINNER_TEXT}: {last_winner}"
+    ), "Not equal winners"
+    StoreResults.clean_last_winner(StoreResults())
+    assert not StoreResults().last_winner, "Last winner still exists in storage"
+    print(f"Last winner after cleaning: {StoreResults().last_winner}")

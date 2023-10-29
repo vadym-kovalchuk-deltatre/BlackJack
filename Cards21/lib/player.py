@@ -111,6 +111,7 @@ if __name__ == "__main__":
     print(player.cards)
     print(f"{player}")
     player.refresh()
+    assert not player.cards
     print(player)
 
     player2 = Player("Baba")

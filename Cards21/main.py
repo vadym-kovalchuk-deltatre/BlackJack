@@ -15,10 +15,9 @@ def print_cards():
     """
     Print user cards and total sum
     """
-    print(
-        f"User cards:{user.cards} - {user.get_sum()}\n\
-        Dealer cards: {dealer.cards} - {dealer.get_sum()}"
-    )
+    for player in (user, dealer):
+        print(f"{player.name:^10}:{player.cards} - {player.get_sum()}")
+    # print(f"Dealer cards: {dealer.cards} - {dealer.get_sum()}")
 
 
 def print_winner(winner: Player) -> None:
@@ -132,8 +131,7 @@ def refresh_table():
 # objects to add the card to their respective hands. This is done to initialize the game with two
 # cards for each player.
 while next_game:
-    last_winner = StoreResults().last_winner
-    if last_winner:
+    if last_winner := StoreResults().last_winner:
         print(last_winner)
         utils.print_underline(len(last_winner) + 1)
     for _ in range(2):
