@@ -79,10 +79,9 @@ class StoreResults:
         """
         file_name = "cards21db"
         ext = ".dat"
-        parent_folder = "db"
         file_name = f"{file_name}{ext}" if is_full else file_name
 
-        return os.path.join(Path(sys.argv[0]).parent, parent_folder, file_name)
+        return os.path.join(Path(sys.argv[0]).parent, file_name)
 
     @staticmethod
     def _has_db() -> bool:
