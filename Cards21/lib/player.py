@@ -53,12 +53,13 @@ class Player:
         :return: the sum of the values of all the cards in the deck.
         """
 
-        def mapping(card_pair: List) -> int:
-            return card_pair[0]
+        return sum([card[0] for card in self._cards])
 
-        return sum(
-            list(map(mapping, self._cards))
-        )  # or sum(list(map(lambda card_pair: card_pair[0], _cards)))
+        # def mapping(card_pair: List) -> int:
+        # return card_pair[0]
+        # return sum(
+        # list(map(mapping, self._cards))
+        # )  # or sum(list(map(lambda card_pair: card_pair[0], _cards)))
 
     def check_first_turn(self) -> bool:
         """
