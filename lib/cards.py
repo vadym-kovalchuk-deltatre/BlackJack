@@ -1,26 +1,26 @@
 """Main placeholder for Cards"""
 import random
-from enum import Enum
 from typing import List, Tuple
 
-
-class Suits(Enum):
-    """Placeholder of card's suits"""
-
-    HEART = "♥"
-    DIAMOND = "♦"
-    SPADE = "♠"
-    CLUB = "♣"
-
-    def __str__(self):
-        return self.value
+from BlackJack.lib.suits import Suits
 
 
 def get_suits() -> Tuple[str, ...]:
+    """
+    The get_suits function returns a tuple of strings representing the four suits in a standard deck of cards.
+
+    :return: A tuple of all the suits in a deck
+    """
     return tuple([item.value for item in Suits])
 
 
 def get_random_suit_index() -> Suits:
+    """
+    The get_random_suit_index function returns a random suit from the deck.
+
+    :return: A random suit from the deck
+    """
+
     def _get_shuffled_suits() -> list[Suits]:
         """
         The _get_shuffled_suits function returns a tuple of the suits in the deck, but shuffled.
@@ -39,6 +39,14 @@ class Cards(object):
     """The Cards class is a placeholder for a card game."""
 
     def __init__(self):
+        """
+        The __init__ function is called when the class is instantiated.
+        It sets up the initial state of the object, and it's where you define
+        the attributes that are available to all instances of this class.  In this case, we're defining a list attribute called 'cards' which will be used to store a deck of cards.
+
+        :param self: Refer to the current instance of the class
+        :return: The object itself
+        """
         self.suited_cards = None
         self.refresh()
 
@@ -53,13 +61,31 @@ class Cards(object):
         cards_list: List[int] = [ace] + list(range(2, ace))
         self.suited_cards = dict(
             zip(
-                (Suits.HEART, Suits.DIAMOND, Suits.SPADE, Suits.CLUB),
+                tuple(Suits),
                 [cards_list.copy() for _ in range(len(cards_list))],
             )
         )
 
     def update_chosen_cards(func):
+        """
+        The update_chosen_cards function is a decorator that takes in a function and returns the same function with an additional
+            action. The additional action is to remove the card from the suited_cards dictionary after it has been chosen. This
+            ensures that no duplicate cards are chosen.
+
+        :param func: Pass in the remove_card function
+        :return: A function that removes a card from the list of suited_cards
+        """
+
         def _remove_card(self):
+            """
+            The _remove_card function is a wrapper for the remove_card function.
+            It removes a card from the deck and then removes that card from its suit in
+            the suited_cards dictionary. This allows us to keep track of which cards are
+            still available in each suit.
+
+            :param self: Refer to the object itself
+            :return: A tuple of the card and its suit
+            """
             card = func(self)
             self.suited_cards[card[1]].remove(card[0])
             return card

@@ -5,5 +5,5 @@ def print_underline(count: int, symbol: str = "=") -> None:
     :param count: int: Specify the number of times to print the symbol
     :param symbol: str: Specify the character that will be used to print the underline
     :return: None
-    :doc-author: Trelent"""
+    """
     print(symbol * count)
