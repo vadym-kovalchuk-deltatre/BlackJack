@@ -18,11 +18,11 @@ class Player:
         """
         This function changes the value of an Ace card from 11 to 1 in a list of cards.
         """
-        print(self._cards)
+
         for _card in self._cards:
             if _card[0] == 11:
                 _card[0] = 1
-                print("Ace (11) was changed to 1")
+                print(f"Ace {_card[1]} as 11 points was changed to 1, {self.cards}")
             break
 
     def add_card(self, _card: list[Any]) -> None:
@@ -57,12 +57,6 @@ class Player:
         """
 
         return sum([_card[0] for _card in self._cards])
-
-        # def mapping(card_pair: List) -> int:
-        # return card_pair[0]
-        # return sum(
-        # list(map(mapping, self._cards))
-        # )  # or sum(list(map(lambda card_pair: card_pair[0], _cards)))
 
     def check_first_turn(self) -> bool:
         """
@@ -116,7 +110,6 @@ if __name__ == "__main__":
     for _ in range(2):
         player.add_card(cards.get_card())
     print(f"Is Winner {player.name}: {player.check_first_turn()}")
-    print(player.cards)
     print(f"{player}")
     player.refresh()
     assert not player.cards
@@ -125,7 +118,7 @@ if __name__ == "__main__":
     player2 = Player("Baba")
     for i in range(2):
         player2.add_card(cards.get_card())
-    print(player2.cards)
+    print(f"{player2} => {player2.cards}")
     print(f"Total sum {player2.name}: {player2.get_sum()}")
     player2.check_first_turn()
     print(f"Check first turn: {player2}")

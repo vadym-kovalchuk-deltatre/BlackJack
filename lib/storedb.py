@@ -47,7 +47,6 @@ class StoreResults:
         """
         with shelve.open(StoreResults._get_db_path()) as db:
             db[self.LAST_WINNER] = data
-        db.close()
 
     def clean_last_winner(self) -> None:
         """
@@ -79,9 +78,13 @@ class StoreResults:
         """
         file_name = "cards21db"
         ext = ".dat"
-        file_name = f"{file_name}{ext}" if is_full else file_name
+        data_folder = "db"
+        path_db = Path(data_folder)
+        if not path_db.exists():
+            path_db.mkdir()
 
-        return os.path.join(Path(sys.argv[0]).parent, file_name)
+        file_name = f"{file_name}{ext}" if is_full else file_name
+        return str(Path(sys.argv[0]).parent / path_db / file_name)
 
     @staticmethod
     def _has_db() -> bool:

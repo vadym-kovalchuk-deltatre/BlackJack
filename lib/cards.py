@@ -2,7 +2,7 @@
 import random
 from typing import List, Tuple
 
-from .suits import Suits
+from BlackJack.lib.suits import Suits
 
 
 def get_suits() -> Tuple[str, ...]:
